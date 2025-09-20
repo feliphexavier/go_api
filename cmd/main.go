@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"go_api/internal/config"
+	userHandler "go_api/internal/handler"
+	userRepo "go_api/internal/repository"
+	userService "go_api/internal/service"
 	"go_api/pkg"
 	"log"
 
@@ -15,7 +18,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = pkg.ConnectPostgres(cfg)
+	db, err := pkg.ConnectPostgres(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -26,7 +29,10 @@ func main() {
 			"message": "ok",
 		})
 	})
-
+	userRepo := userRepo.NewRepository(db)
+	userService := userService.NewService(cfg, userRepo)
+	userHandler := userHandler.NewHandler(r, userService)
+	userHandler.RouteList()
 	server := fmt.Sprintf("127.0.0.1:%s", cfg.Port)
 	r.Run(server)
 }
