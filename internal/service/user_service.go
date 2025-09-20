@@ -10,7 +10,7 @@ import (
 )
 
 type UserService interface {
-	register(ctx context.Context, req *dto.RegisterRequest) (uuid.UUID, int, error)
+	Register(ctx context.Context, req *dto.RegisterRequest) (uuid.UUID, int, error)
 }
 type userService struct {
 	cfg      *config.Config

@@ -10,7 +10,7 @@ import (
 
 type UserRepository interface {
 	GetUserByEmailOrUsername(ctx context.Context, email string, username string) (*model.UserModel, error)
-	CreateUser(ctx context.Context, model *model.UserModel) (uuid.UUID, error)
+	CreateUser(ctx context.Context, model *model.UserModel) (uuid.UUID, int, error)
 }
 
 type userRepository struct {
