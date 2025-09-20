@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go_api/internal/config"
+	"go_api/pkg"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	_, err = pkg.ConnectPostgres(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	r.GET("/", func(c *gin.Context) {
@@ -21,6 +26,7 @@ func main() {
 			"message": "ok",
 		})
 	})
+
 	server := fmt.Sprintf("127.0.0.1:%s", cfg.Port)
 	r.Run(server)
 }
