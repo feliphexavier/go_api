@@ -1,4 +1,4 @@
-package sevice
+package service
 
 import (
 	"context"
@@ -19,6 +19,9 @@ func (s *userService) Register(ctx context.Context, req *dto.RegisterRequest) (u
 	}
 	if userExists != nil {
 		return uuid.Nil, http.StatusBadRequest, errors.New("user already exists")
+	}
+	if len(req.Password) < 10 {
+		return uuid.Nil, http.StatusBadRequest, errors.New("password too short")
 	}
 	passHash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {

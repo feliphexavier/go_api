@@ -15,4 +15,12 @@ type (
 		CreatedAt       time.Time
 		UpdatedAt       time.Time
 	}
+	RefreshTokenModel struct {
+		ID           uuid.UUID
+		UserID       uuid.UUID
+		RefreshToken string
+		ExpiredAt    time.Time
+		CreatedAt    time.Time
+		UpdatedAt    time.Time
+	}
 )
