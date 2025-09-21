@@ -13,7 +13,7 @@ func (r *userRepository) GetRefreshToken(ctx context.Context, userID uuid.UUID, 
 	query := `SELECT id, user_id, refresh_token, expired_at FROM refresh_tokens WHERE user_id = $1 AND expired_at >= $2`
 	row := r.db.QueryRow(query, userID, now)
 	var result model.RefreshTokenModel
-	err := row.Scan(&result.ID, &result.UserID, &result.RefreshToken, &result.ExpiredAt, &result.CreatedAt, &result.UpdatedAt)
+	err := row.Scan(&result.ID, &result.UserID, &result.RefreshToken, &result.ExpiredAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
