@@ -12,6 +12,7 @@ import (
 type UserService interface {
 	Register(ctx context.Context, req *dto.RegisterRequest) (uuid.UUID, int, error)
 	Login(ctx context.Context, req *dto.LoginRequest) (string, string, int, error)
+	RefreshToken(ctx context.Context, req *dto.RefreshTokenRequest, userId uuid.UUID) (string, string, int, error)
 }
 type userService struct {
 	cfg      *config.Config

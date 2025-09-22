@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"go_api/internal/middleware"
 	sevice "go_api/internal/service"
 
 	"github.com/gin-gonic/gin"
@@ -20,8 +21,12 @@ func NewHandler(api *gin.Engine, validate *validator.Validate, userService sevic
 		userService: userService,
 	}
 }
-func (h *Handler) RouteList() {
+func (h *Handler) RouteList(secretkey string) {
 	authRoute := h.api.Group("/auth")
 	authRoute.POST("/register", h.Register)
 	authRoute.POST("/login", h.Login)
+
+	refreshRoute := h.api.Group("/auth")
+	refreshRoute.Use(middleware.AuthRefreshTokenMiddleware(secretkey))
+	refreshRoute.POST("/refresh", h.RefreshToken)
 }

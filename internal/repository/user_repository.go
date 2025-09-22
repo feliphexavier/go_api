@@ -14,6 +14,8 @@ type UserRepository interface {
 	CreateUser(ctx context.Context, model *model.UserModel) (uuid.UUID, int, error)
 	GetRefreshToken(ctx context.Context, userId uuid.UUID, now time.Time) (*model.RefreshTokenModel, error)
 	CreateRefreshToken(ctx context.Context, model *model.RefreshTokenModel) error
+	GetUserById(ctx context.Context, userId uuid.UUID) (*model.UserModel, error)
+	DeleteRefreshTokenByUserId(ctx context.Context, userId uuid.UUID) (int64, error)
 }
 
 type userRepository struct {
