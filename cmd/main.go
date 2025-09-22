@@ -3,8 +3,11 @@ package main
 import (
 	"fmt"
 	"go_api/internal/config"
+	tripHandler "go_api/internal/handler"
 	userHandler "go_api/internal/handler"
+	tripRepo "go_api/internal/repository"
 	userRepo "go_api/internal/repository"
+	tripService "go_api/internal/service"
 	userService "go_api/internal/service"
 	"go_api/pkg"
 	"log"
@@ -32,9 +35,17 @@ func main() {
 		})
 	})
 	userRepo := userRepo.NewRepository(db)
+	tripRepo := tripRepo.NewTripRepository(db)
+
 	userService := userService.NewService(cfg, userRepo)
+	tripService := tripService.NewTripService(cfg, tripRepo)
+
 	userHandler := userHandler.NewHandler(r, validate, userService)
+	tripHandler := tripHandler.NewTripHandler(r, validate, tripService)
+
 	userHandler.RouteList(cfg.SecretJWT)
+	tripHandler.RouteList(cfg.SecretJWT)
+
 	server := fmt.Sprintf("127.0.0.1:%s", cfg.Port)
 	r.Run(server)
 }
