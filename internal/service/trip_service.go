@@ -11,6 +11,7 @@ import (
 
 type TripService interface {
 	CreateTrip(ctx context.Context, req *dto.CreateOrUpdateTripRequest, userID uuid.UUID) (uuid.UUID, int, error)
+	UpdateTrip(ctx context.Context, req *dto.CreateOrUpdateTripRequest, tripID, userID uuid.UUID) (uuid.UUID, int, error)
 }
 type tripService struct {
 	cfg      *config.Config

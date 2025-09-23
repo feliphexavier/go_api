@@ -24,4 +24,5 @@ func (h *TripHandler) RouteList(secretKey string) {
 	routeAuth := h.api.Group("/trip")
 	routeAuth.Use(middleware.AuthMiddleware(secretKey))
 	routeAuth.POST("", h.CreateTrip)
+	routeAuth.PUT("/:post_id/update", h.UpdateTrip)
 }
