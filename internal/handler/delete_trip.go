@@ -3,30 +3,16 @@ package handler
 import (
 	"errors"
 	"fmt"
-	"go_api/internal/dto"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
-func (h *TripHandler) UpdateTrip(c *gin.Context) {
+func (h *TripHandler) DeleteTrip(c *gin.Context) {
 	var ctx = c.Request.Context()
-	var req dto.CreateOrUpdateTripRequest
 
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": err.Error(),
-		})
-		return
-	}
-	if err := h.validate.Struct(req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": err.Error(),
-		})
-	}
 	userId, exists := c.Get("userID")
-	fmt.Println(userId)
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "userID not found"})
 		return
@@ -36,22 +22,22 @@ func (h *TripHandler) UpdateTrip(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "invalid userID type"})
 		return
 	}
+
 	tripIDstr := c.Param("post_id")
 	tripID, err := uuid.Parse(tripIDstr)
+	fmt.Println(tripID, userId)
 	if err != nil {
-		c.JSON(http.StatusContinue, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"message": errors.New("Parsing error"),
 		})
 		return
 	}
-	tripID, statusCode, err := h.tripService.UpdateTrip(ctx, &req, tripID, id)
+	_, err = h.tripService.DeleteTrip(ctx, tripID, id)
 	if err != nil {
-		c.JSON(statusCode, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
 		})
 		return
 	}
-	c.JSON(statusCode, dto.CreateOrUpdateTripResponse{
-		ID: tripID,
-	})
+	c.JSON(http.StatusNoContent, gin.H{"message": "deleted"})
 }

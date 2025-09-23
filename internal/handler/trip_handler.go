@@ -25,4 +25,5 @@ func (h *TripHandler) RouteList(secretKey string) {
 	routeAuth.Use(middleware.AuthMiddleware(secretKey))
 	routeAuth.POST("", h.CreateTrip)
 	routeAuth.PUT("/:post_id/update", h.UpdateTrip)
+	routeAuth.DELETE("/:post_id/delete", h.DeleteTrip)
 }
