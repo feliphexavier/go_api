@@ -5,6 +5,7 @@ import (
 	"go_api/internal/config"
 	tripHandler "go_api/internal/handler"
 	userHandler "go_api/internal/handler"
+	pictureRepo "go_api/internal/repository"
 	tripRepo "go_api/internal/repository"
 	userRepo "go_api/internal/repository"
 	tripService "go_api/internal/service"
@@ -36,6 +37,7 @@ func main() {
 	})
 	userRepo := userRepo.NewRepository(db)
 	tripRepo := tripRepo.NewTripRepository(db)
+	pictureRepo := pictureRepo.NewPictureRepository(db)
 
 	userService := userService.NewService(cfg, userRepo)
 	tripService := tripService.NewTripService(cfg, tripRepo)

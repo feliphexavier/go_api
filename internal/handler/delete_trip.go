@@ -2,7 +2,6 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -25,7 +24,7 @@ func (h *TripHandler) DeleteTrip(c *gin.Context) {
 
 	tripIDstr := c.Param("post_id")
 	tripID, err := uuid.Parse(tripIDstr)
-	fmt.Println(tripID, userId)
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": errors.New("Parsing error"),

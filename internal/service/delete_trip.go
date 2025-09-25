@@ -18,7 +18,7 @@ func (s *tripService) DeleteTrip(ctx context.Context, tripID, userID uuid.UUID) 
 	if tripExist.User_id != userID {
 		return http.StatusNotFound, err
 	}
-	err = s.tripRepo.DeleteTrip(ctx, tripID)
+	_, err = s.tripRepo.DeleteTrip(ctx, tripID)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
