@@ -15,11 +15,13 @@ type PictureService interface {
 type pictureService struct {
 	cfg         *config.Config
 	pictureRepo repository.PictureRepository
+	tripRepo    repository.TripRepository
 }
 
-func NewPictureService(cfg *config.Config, pictureRepo repository.PictureRepository) PictureService {
+func NewPictureService(cfg *config.Config, pictureRepo repository.PictureRepository, tripRepo repository.TripRepository) PictureService {
 	return &pictureService{
 		cfg:         cfg,
 		pictureRepo: pictureRepo,
+		tripRepo:    tripRepo,
 	}
 }

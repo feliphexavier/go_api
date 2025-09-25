@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"go_api/internal/config"
+	pictureHandler "go_api/internal/handler"
 	tripHandler "go_api/internal/handler"
 	userHandler "go_api/internal/handler"
 	pictureRepo "go_api/internal/repository"
 	tripRepo "go_api/internal/repository"
 	userRepo "go_api/internal/repository"
+	pictureService "go_api/internal/service"
 	tripService "go_api/internal/service"
 	userService "go_api/internal/service"
 	"go_api/pkg"
@@ -41,15 +43,16 @@ func main() {
 
 	userService := userService.NewService(cfg, userRepo)
 	tripService := tripService.NewTripService(cfg, tripRepo)
+	pictureService := pictureService.NewPictureService(cfg, pictureRepo, tripRepo)
 
 	userHandler := userHandler.NewHandler(r, validate, userService)
 	tripHandler := tripHandler.NewTripHandler(r, validate, tripService)
+	pictureHandler := pictureHandler.NewPictureHandler(r, pictureService)
 
+	pictureHandler.RouteList(cfg.SecretJWT)
 	userHandler.RouteList(cfg.SecretJWT)
 	tripHandler.RouteList(cfg.SecretJWT)
-	/*id := "1909bd03-68f1-48f5-90fa-00a6ffb29c71"
-	uid := "75b54fb6-a55b-4c3c-8be2-65382436fc09"
-	fmt.Println(tripService.DeleteTrip(context.Background(), uuid.MustParse(id), uuid.MustParse(uid)))*/
+
 	server := fmt.Sprintf("127.0.0.1:%s", cfg.Port)
 	r.Run(server)
 }

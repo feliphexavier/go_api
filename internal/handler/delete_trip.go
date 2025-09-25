@@ -22,7 +22,7 @@ func (h *TripHandler) DeleteTrip(c *gin.Context) {
 		return
 	}
 
-	tripIDstr := c.Param("post_id")
+	tripIDstr := c.Param("trip_id")
 	tripID, err := uuid.Parse(tripIDstr)
 
 	if err != nil {
@@ -39,4 +39,5 @@ func (h *TripHandler) DeleteTrip(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusNoContent, gin.H{"message": "deleted"})
+	return
 }

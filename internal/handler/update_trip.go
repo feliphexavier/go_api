@@ -36,7 +36,7 @@ func (h *TripHandler) UpdateTrip(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "invalid userID type"})
 		return
 	}
-	tripIDstr := c.Param("post_id")
+	tripIDstr := c.Param("trip_id")
 	tripID, err := uuid.Parse(tripIDstr)
 	if err != nil {
 		c.JSON(http.StatusContinue, gin.H{
@@ -54,4 +54,5 @@ func (h *TripHandler) UpdateTrip(c *gin.Context) {
 	c.JSON(statusCode, dto.CreateOrUpdateTripResponse{
 		ID: tripID,
 	})
+	return
 }
