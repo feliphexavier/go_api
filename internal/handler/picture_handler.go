@@ -22,4 +22,5 @@ func (h *PictureHandler) RouteList(secretKey string) {
 	routeAuth := h.api.Group("/picture")
 	routeAuth.Use(middleware.AuthMiddleware(secretKey))
 	routeAuth.POST("/:trip_id", h.CreatePicture)
+	routeAuth.DELETE("/:picture_id/delete", h.DeletePicture)
 }

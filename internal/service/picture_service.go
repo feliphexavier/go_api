@@ -11,6 +11,7 @@ import (
 
 type PictureService interface {
 	CreatePicture(ctx context.Context, req *dto.CreatePictureRequest, tripID uuid.UUID) (uuid.UUID, error)
+	DeletePicture(ctx context.Context, pictureID uuid.UUID) error
 }
 type pictureService struct {
 	cfg         *config.Config
