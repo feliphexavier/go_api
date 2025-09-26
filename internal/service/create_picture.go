@@ -2,29 +2,37 @@ package service
 
 import (
 	"context"
-	"go_api/internal/dto"
+	"fmt"
 	"go_api/internal/model"
 
 	"github.com/google/uuid"
 )
 
-func (s *pictureService) CreatePicture(ctx context.Context, req *dto.CreatePictureRequest, tripID uuid.UUID) (uuid.UUID, error) {
-	id := uuid.New()
+func (s *pictureService) CreatePicture(ctx context.Context, filesPath []string, tripID uuid.UUID) ([]string, error) {
 	tripExists, err := s.tripRepo.GetTripByID(ctx, tripID)
 	if err != nil {
-		return uuid.Nil, err
+		return nil, err
 	}
 	if tripExists == nil {
-		return uuid.Nil, nil
+		return nil, fmt.Errorf("trip not found")
 	}
 
-	_, err = s.pictureRepo.CreatePicture(ctx, &model.PictureModel{
-		ID:      id,
-		Url:     req.Url,
-		Trip_id: tripID,
-	})
-	if err != nil {
-		return uuid.Nil, err
+	var picturesPath []string
+
+	for _, filePath := range filesPath {
+		id := uuid.New()
+
+		_, err := s.pictureRepo.CreatePicture(ctx, &model.PictureModel{
+			ID:      id,
+			Url:     filePath,
+			Trip_id: tripID,
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		picturesPath = append(picturesPath, filePath)
 	}
-	return tripID, nil
+
+	return picturesPath, nil
 }

@@ -1,42 +1,77 @@
 package handler
 
 import (
-	"errors"
-	"go_api/internal/dto"
+	"fmt"
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
 func (h *PictureHandler) CreatePicture(c *gin.Context) {
-	var ctx = c.Request.Context()
-	var req dto.CreatePictureRequest
+	ctx := c.Request.Context()
 
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": errors.New("Invalid request body"),
-		})
+	form, err := c.MultipartForm()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid form data"})
 		return
+	}
+
+	files := form.File["images"]
+	filesPath := []string{}
+
+	for _, file := range files {
+		fileType := filepath.Ext(file.Filename)
+		baseName := strings.TrimSuffix(filepath.Base(file.Filename), fileType)
+		filename := strings.ReplaceAll(strings.ToLower(baseName), " ", "-") + "-" + fmt.Sprintf("%v", time.Now().Unix()) + fileType
+
+		path := "http://localhost:8000/images/multiple/" + filename
+		filesPath = append(filesPath, path)
+		if err := os.MkdirAll("./public/multiple", os.ModePerm); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "cannot create directory"})
+			return
+		}
+		out, err := os.Create("./public/multiple/" + filename)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+			return
+		}
+
+		reader, err := file.Open()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+			out.Close()
+			return
+		}
+
+		if _, err := io.Copy(out, reader); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+			reader.Close()
+			out.Close()
+			return
+		}
+
+		reader.Close()
+		out.Close()
 	}
 
 	tripIDstr := c.Param("trip_id")
 	tripID, err := uuid.Parse(tripIDstr)
 	if err != nil {
-		c.JSON(http.StatusContinue, gin.H{
-			"message": errors.New("Parsing error"),
-		})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid trip_id"})
 		return
 	}
-	PictureID, err := h.pictureService.CreatePicture(ctx, &req, tripID)
+
+	PicturesPath, err := h.pictureService.CreatePicture(ctx, filesPath, tripID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err.Error(),
-		})
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, dto.CreatePictureReponse{
-		ID: PictureID,
-	})
-	return
+	fmt.Println(PicturesPath)
+	c.JSON(http.StatusCreated, gin.H{"message": "created", "data": PicturesPath})
 }

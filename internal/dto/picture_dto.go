@@ -7,6 +7,6 @@ type (
 		Url string `json:"url" validade:"required"`
 	}
 	CreatePictureReponse struct {
-		ID uuid.UUID `json:"id"`
+		IDS []uuid.UUID `json:"id"`
 	}
 )
