@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"go_api/internal/dto"
 	"go_api/internal/model"
 
 	"github.com/google/uuid"
@@ -11,6 +12,7 @@ import (
 type TripRepository interface {
 	CreateTrip(ctx context.Context, model *model.TripModel, userID uuid.UUID) (uuid.UUID, error)
 	GetTripByID(ctx context.Context, tripID uuid.UUID) (*model.TripModel, error)
+	GetAllTrips(ctx context.Context, param *dto.GetAllTripsRequest, userID uuid.UUID, offSet int) ([]*model.TripModel, error)
 	UpdateTrip(ctx context.Context, model *model.TripModel, tripID uuid.UUID) error
 	DeleteTrip(ctx context.Context, tripID uuid.UUID) (int, error)
 }

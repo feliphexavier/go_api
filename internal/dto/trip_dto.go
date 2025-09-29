@@ -27,4 +27,14 @@ type (
 		CreateAt    string    `json:"created_at"`
 		Pictures    []Picture `json:"pictures"`
 	}
+	GetAllTripsRequest struct {
+		Limit int `param:"limit"`
+		Page  int `param:"page"`
+	}
+	GetAllTripsResponse struct {
+		TotalPages  int               `json:"total_pages"`
+		CurrentPage int               `json:"current_page"`
+		Limit       int               `json:"limit"`
+		Data        []GetTripResponse `json:"trips"`
+	}
 )

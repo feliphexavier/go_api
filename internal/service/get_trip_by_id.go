@@ -8,13 +8,16 @@ import (
 	"github.com/google/uuid"
 )
 
-func (s *tripService) GetTripByID(ctx context.Context, tripID uuid.UUID) (*dto.GetTripResponse, int, error) {
+func (s *tripService) GetTripByID(ctx context.Context, tripID, userID uuid.UUID) (*dto.GetTripResponse, int, error) {
 	trip, err := s.tripRepo.GetTripByID(ctx, tripID)
 	if err != nil {
 		return nil, http.StatusBadRequest, err
 	}
 	if trip == nil {
 		return nil, http.StatusNotFound, nil
+	}
+	if trip.User_id != userID {
+		return nil, http.StatusForbidden, nil
 	}
 	tripIDs := []uuid.UUID{trip.ID}
 	pictures, err := s.pictureRepo.GetPicturesByTripID(ctx, tripIDs)

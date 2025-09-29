@@ -23,6 +23,8 @@ func NewTripHandler(api *gin.Engine, validate *validator.Validate, tripService s
 func (h *TripHandler) RouteList(secretKey string) {
 	routeAuth := h.api.Group("/trip")
 	routeAuth.Use(middleware.AuthMiddleware(secretKey))
+	routeAuth.GET("/:trip_id", h.GetTripByID)
+	routeAuth.GET("", h.GetAllTrips)
 	routeAuth.POST("", h.CreateTrip)
 	routeAuth.PUT("/:trip_id/update", h.UpdateTrip)
 	routeAuth.DELETE("/:trip_id/delete", h.DeleteTrip)

@@ -52,7 +52,6 @@ func main() {
 	pictureHandler.RouteList(cfg.SecretJWT)
 	userHandler.RouteList(cfg.SecretJWT)
 	tripHandler.RouteList(cfg.SecretJWT)
-
 	server := fmt.Sprintf("127.0.0.1:%s", cfg.Port)
 	r.Run(server)
 }
