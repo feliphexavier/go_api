@@ -13,15 +13,18 @@ type TripService interface {
 	CreateTrip(ctx context.Context, req *dto.CreateOrUpdateTripRequest, userID uuid.UUID) (uuid.UUID, int, error)
 	UpdateTrip(ctx context.Context, req *dto.CreateOrUpdateTripRequest, tripID, userID uuid.UUID) (uuid.UUID, int, error)
 	DeleteTrip(ctx context.Context, tripID, userID uuid.UUID) (int, error)
+	GetTripByID(ctx context.Context, tripID uuid.UUID) (*dto.GetTripResponse, int, error)
 }
 type tripService struct {
-	cfg      *config.Config
-	tripRepo repository.TripRepository
+	cfg         *config.Config
+	tripRepo    repository.TripRepository
+	pictureRepo repository.PictureRepository
 }
 
-func NewTripService(cfg *config.Config, tripRepo repository.TripRepository) TripService {
+func NewTripService(cfg *config.Config, tripRepo repository.TripRepository, pictureRepo repository.PictureRepository) TripService {
 	return &tripService{
-		cfg:      cfg,
-		tripRepo: tripRepo,
+		cfg:         cfg,
+		tripRepo:    tripRepo,
+		pictureRepo: pictureRepo,
 	}
 }

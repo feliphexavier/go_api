@@ -42,7 +42,7 @@ func main() {
 	pictureRepo := pictureRepo.NewPictureRepository(db)
 
 	userService := userService.NewService(cfg, userRepo)
-	tripService := tripService.NewTripService(cfg, tripRepo)
+	tripService := tripService.NewTripService(cfg, tripRepo, pictureRepo)
 	pictureService := pictureService.NewPictureService(cfg, pictureRepo, tripRepo)
 
 	userHandler := userHandler.NewHandler(r, validate, userService)
