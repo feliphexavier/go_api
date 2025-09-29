@@ -1,0 +1,15 @@
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server for a trip booking service.
+  termsOfService: http://swagger.io/terms/
+  title: Photo Album API
+  version: "1.0"
+paths: {}
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
