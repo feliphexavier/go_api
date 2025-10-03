@@ -1,0 +1,560 @@
+basePath: /
+definitions:
+  go_api_internal_dto.CreateOrUpdateTripRequest:
+    properties:
+      description:
+        type: string
+      end_date:
+        type: string
+      start_date:
+        type: string
+      title:
+        type: string
+    required:
+    - description
+    - end_date
+    - start_date
+    - title
+    type: object
+  go_api_internal_dto.CreateOrUpdateTripResponse:
+    properties:
+      id:
+        type: string
+    type: object
+  go_api_internal_dto.GetAllTripsResponse:
+    properties:
+      current_page:
+        type: integer
+      limit:
+        type: integer
+      total_pages:
+        type: integer
+      trips:
+        items:
+          $ref: '#/definitions/go_api_internal_dto.GetTripResponse'
+        type: array
+    type: object
+  go_api_internal_dto.GetTripResponse:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: string
+      pictures:
+        items:
+          $ref: '#/definitions/go_api_internal_dto.Picture'
+        type: array
+      start_date:
+        type: string
+      title:
+        type: string
+    type: object
+  go_api_internal_dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  go_api_internal_dto.LoginResponse:
+    properties:
+      refresh_token:
+        type: string
+      token:
+        type: string
+    type: object
+  go_api_internal_dto.Picture:
+    properties:
+      id:
+        type: string
+      url:
+        type: string
+    type: object
+  go_api_internal_dto.RefreshTokenRequest:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
+  go_api_internal_dto.RefreshTokenResponse:
+    properties:
+      refresh_token:
+        type: string
+      token:
+        type: string
+    type: object
+  go_api_internal_dto.RegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 10
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  go_api_internal_dto.RegisterResponse:
+    properties:
+      id:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+  description: This is a sample server for a photo album application.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Photo Album API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return a JWT token
+      parameters:
+      - description: User login info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/go_api_internal_dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go_api_internal_dto.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User Login
+      tags:
+      - Auth
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Refresh the JWT token using a valid refresh token
+      parameters:
+      - description: Refresh token info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/go_api_internal_dto.RefreshTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go_api_internal_dto.RefreshTokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Refresh JWT Token
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with the provided information
+      parameters:
+      - description: User registration info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/go_api_internal_dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/go_api_internal_dto.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Conflict
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register a new user
+      tags:
+      - Auth
+  /picture/{picture_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete picture by picture ID
+      parameters:
+      - description: picture_id
+        in: path
+        name: picture_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete picture
+      tags:
+      - Pictures
+  /picture/{trip_id}:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload multiple pictures for a specific trip by trip ID
+      parameters:
+      - description: trip_id
+        in: path
+        name: trip_id
+        required: true
+        type: string
+      - description: Images
+        in: formData
+        name: images
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create pictures for a trip
+      tags:
+      - Pictures
+  /trip:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a paginated list of all trips for the authenticated user
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go_api_internal_dto.GetAllTripsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all trips
+      tags:
+      - Trips
+    post:
+      consumes:
+      - application/json
+      description: Create a new trip with the provided information
+      parameters:
+      - description: Trip creation info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/go_api_internal_dto.CreateOrUpdateTripRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/go_api_internal_dto.CreateOrUpdateTripResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new trip
+      tags:
+      - Trips
+  /trip/{trip_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete trip by trip ID
+      parameters:
+      - description: trip_id
+        in: path
+        name: trip_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete trip
+      tags:
+      - Trips
+    get:
+      consumes:
+      - application/json
+      description: Retrieve trip details by trip ID
+      parameters:
+      - description: trip_id
+        in: path
+        name: trip_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go_api_internal_dto.GetTripResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get trip by ID
+      tags:
+      - Trips
+    put:
+      consumes:
+      - application/json
+      description: Update trip details by trip ID
+      parameters:
+      - description: trip_id
+        in: path
+        name: trip_id
+        required: true
+        type: string
+      - description: Trip details
+        in: body
+        name: trip
+        required: true
+        schema:
+          $ref: '#/definitions/go_api_internal_dto.CreateOrUpdateTripRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go_api_internal_dto.CreateOrUpdateTripResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update trip
+      tags:
+      - Trips
+securityDefinitions:
+  BearerAuth:
+    description: Bearer token authentication
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

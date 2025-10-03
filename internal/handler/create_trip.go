@@ -8,6 +8,19 @@ import (
 	"github.com/google/uuid"
 )
 
+// CreateTrip godoc
+// @Summary      Create a new trip
+// @Description  Create a new trip with the provided information
+// @Tags         Trips
+// @Accept       json
+// @Produce      json
+// @Param        request  body      dto.CreateOrUpdateTripRequest  true  "Trip creation info"
+// @Success      201  {object}  dto.CreateOrUpdateTripResponse
+// @Security     BearerAuth
+// @Failure      400  {object}  map[string]string
+// @Failure      401  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /trip [post]
 func (h *TripHandler) CreateTrip(c *gin.Context) {
 	var ctx = c.Request.Context()
 	var req dto.CreateOrUpdateTripRequest

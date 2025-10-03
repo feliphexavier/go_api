@@ -8,6 +8,18 @@ import (
 	"github.com/google/uuid"
 )
 
+// DeletePicture godoc
+// @Summary      Delete picture
+// @Description  Delete picture by picture ID
+// @Tags         Pictures
+// @Accept       json
+// @Produce      json
+// @Param        picture_id   path      string  true  "picture_id"
+// @Security     BearerAuth
+// @Success      204  {object}  map[string]string
+// @Failure      400  {object}  map[string]string
+// @Failure      401  {object}  map[string]string
+// @Router       /picture/{picture_id} [delete]
 func (h *PictureHandler) DeletePicture(c *gin.Context) {
 	var ctx = c.Request.Context()
 

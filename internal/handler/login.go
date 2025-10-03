@@ -7,6 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Register godoc
+// @Summary      User Login
+// @Description  Authenticate user and return a JWT token
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        request  body      dto.LoginRequest  true  "User login info"
+// @Success      200  {object}  dto.LoginResponse
+// @Failure      400  {object}  map[string]string
+// @Failure      401  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /auth/login [post]
 func (h *Handler) Login(c *gin.Context) {
 	var ctx = c.Request.Context()
 	var req dto.LoginRequest

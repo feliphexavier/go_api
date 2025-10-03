@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	_ "go_api/cmd/docs"
+	_ "go_api/docs"
 	"go_api/internal/config"
+	_ "go_api/internal/handler"
 	pictureHandler "go_api/internal/handler"
 	tripHandler "go_api/internal/handler"
 	userHandler "go_api/internal/handler"
@@ -24,15 +25,18 @@ import (
 
 // @title           Photo Album API
 // @version         1.0
-// @description     This is a sample server for a trip booking service.
+// @description     This is a sample server for a photo album application.
 // @termsOfService  http://swagger.io/terms/
-
-//@securityDefinitions.apikey BearerAuth
-//@in header
-//@name Authorization
-//@description Type "Bearer" followed by a space and JWT token.
-
-// @host 	localhost:8080
+// @contact.name   API Support
+// @contact.email  support@example.com
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+// @host      localhost:8080
+// @BasePath  /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Bearer token authentication
 func main() {
 	r := gin.Default()
 	validate := validator.New()
@@ -68,6 +72,7 @@ func main() {
 	userHandler.RouteList(cfg.SecretJWT)
 	tripHandler.RouteList(cfg.SecretJWT)
 	server := fmt.Sprintf("127.0.0.1:%s", cfg.Port)
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.Run(server)
 }

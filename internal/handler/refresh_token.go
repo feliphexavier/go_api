@@ -8,6 +8,19 @@ import (
 	"github.com/google/uuid"
 )
 
+// RefreshToken godoc
+// @Summary      Refresh JWT Token
+// @Description  Refresh the JWT token using a valid refresh token
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        request  body      dto.RefreshTokenRequest  true  "Refresh token info"
+// @Success      200  {object}  dto.RefreshTokenResponse
+// @Security     BearerAuth
+// @Failure      400  {object}  map[string]string
+// @Failure      401  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /auth/refresh [post]
 func (h *Handler) RefreshToken(c *gin.Context) {
 	var ctx = c.Request.Context()
 	var req dto.RefreshTokenRequest

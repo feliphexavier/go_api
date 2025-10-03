@@ -7,6 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Register godoc
+// @Summary      Register a new user
+// @Description  Register a new user with the provided information
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        request  body      dto.RegisterRequest  true  "User registration info"
+// @Success      201  {object}  dto.RegisterResponse
+// @Failure      400  {object}  map[string]string
+// @Failure      409  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /auth/register [post]
 func (h *Handler) Register(c *gin.Context) {
 	var ctx = c.Request.Context()
 	var req dto.RegisterRequest

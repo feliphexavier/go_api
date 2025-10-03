@@ -26,6 +26,6 @@ func (h *TripHandler) RouteList(secretKey string) {
 	routeAuth.GET("/:trip_id", h.GetTripByID)
 	routeAuth.GET("", h.GetAllTrips)
 	routeAuth.POST("", h.CreateTrip)
-	routeAuth.PUT("/:trip_id/update", h.UpdateTrip)
-	routeAuth.DELETE("/:trip_id/delete", h.DeleteTrip)
+	routeAuth.PUT("/:trip_id", h.UpdateTrip)
+	routeAuth.DELETE("/:trip_id", h.DeleteTrip)
 }

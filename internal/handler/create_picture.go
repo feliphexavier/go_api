@@ -13,6 +13,20 @@ import (
 	"github.com/google/uuid"
 )
 
+// CreatePicture godoc
+// @Summary      Create pictures for a trip
+// @Description  Upload multiple pictures for a specific trip by trip ID
+// @Tags         Pictures
+// @Accept       multipart/form-data
+// @Produce      json
+// @Param        trip_id   path      string  true  "trip_id"
+// @Param        images    formData  file    true  "Images"
+// @Security     BearerAuth
+// @Success      201  {object}  map[string]interface{}
+// @Failure      400  {object}  map[string]string
+// @Failure      401  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /picture/{trip_id} [post]
 func (h *PictureHandler) CreatePicture(c *gin.Context) {
 	ctx := c.Request.Context()
 

@@ -10,6 +10,21 @@ import (
 	"github.com/google/uuid"
 )
 
+// UpdateTrip godoc
+// @Summary      Update trip
+// @Description  Update trip details by trip ID
+// @Tags         Trips
+// @Accept       json
+// @Produce      json
+// @Param        trip_id   path      string  true  "trip_id"
+// @Param        trip      body      dto.CreateOrUpdateTripRequest  true  "Trip details"
+// @Security     BearerAuth
+// @Success      200  {object}  dto.CreateOrUpdateTripResponse
+// @Failure      400  {object}  map[string]string
+// @Failure      401  {object}  map[string]string
+// @Failure      404  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /trip/{trip_id} [put]
 func (h *TripHandler) UpdateTrip(c *gin.Context) {
 	var ctx = c.Request.Context()
 	var req dto.CreateOrUpdateTripRequest

@@ -9,6 +9,20 @@ import (
 	"github.com/google/uuid"
 )
 
+// GetAllTrips godoc
+// @Summary      Get all trips
+// @Description  Retrieve a paginated list of all trips for the authenticated user
+// @Tags         Trips
+// @Accept       json
+// @Produce      json
+// @Param        page   query      int  false  "Page number"  default(1)
+// @Param        limit  query      int  false  "Number of items per page"  default(10)
+// @Security     BearerAuth
+// @Success      200  {object}  dto.GetAllTripsResponse
+// @Failure      400  {object}  map[string]string
+// @Failure      401  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /trip [get]
 func (h *TripHandler) GetAllTrips(c *gin.Context) {
 	ctx := c.Request.Context()
 	pageStr := c.DefaultQuery("page", "1")

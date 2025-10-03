@@ -8,6 +8,18 @@ import (
 	"github.com/google/uuid"
 )
 
+// DeleteTrip godoc
+// @Summary      Delete trip
+// @Description  Delete trip by trip ID
+// @Tags         Trips
+// @Accept       json
+// @Produce      json
+// @Param        trip_id   path      string  true  "trip_id"
+// @Security     BearerAuth
+// @Success      204  {object}  map[string]string
+// @Failure      400  {object}  map[string]string
+// @Failure      401  {object}  map[string]string
+// @Router       /trip/{trip_id} [delete]
 func (h *TripHandler) DeleteTrip(c *gin.Context) {
 	var ctx = c.Request.Context()
 
